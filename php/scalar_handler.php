@@ -41,19 +41,25 @@ function scalar_handler($data, $path) {
     }
 }
 
-function get_scalar_data($path) {
+function get_scalar_data($path, $from) {
     $data = file($path . 'scalars.csv');
+
+    if (!$data) {
+        $data = array();
+    }
 
     foreach ($data as $i => $line) {
         $values = explode(';', $line);
-
-        $data[$i] = array(
-            "wall_time" => (float) $values[0],
-            "run" => $values[1],
-            "tag" => $values[2],
-            "step" => (int) $values[3],
-            "scalar" => (float) $values[4]
-        );
+        
+        if ($from < $values[0]) {
+            $data[$i] = array(
+                "wall_time" => (float) $values[0],
+                "run" => trim($values[1]),
+                "tag" => trim($values[2]),
+                "step" => (int) $values[3],
+                "scalar" => (float) $values[4]
+            );
+        }
     }
 
     return json_encode($data);

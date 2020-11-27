@@ -38,7 +38,8 @@ class Step {
 class Tag {
     name = '';
     steps = [];
-    last_activity = undefined;
+    last_activity = 0;
+    first_activity = 0;
     color_id = 0;
     run = '';
 
@@ -50,11 +51,8 @@ class Tag {
     addScalar(step, wall_time, scalar) {
         this.steps.push(new Step(step, wall_time, scalar));
 
-        if (this.last_activity && wall_time > this.last_activity) {
-            this.last_activity = wall_time;
-        } else if (!this.last_activity) {
-            this.last_activity = wall_time;
-        }
+        this.last_activity = Math.max(wall_time, this.last_activity);
+        this.first_activity = Math.min(wall_time, this.last_activity);
 
         this.steps.sort((a,b) => a.step - b.step);
     }
@@ -88,8 +86,10 @@ class Run {
     name = '';
     tags = {};
     exceptions = [];
+    end_time = 0;
     _color_id = 0;
     visible = true;
+    running = true;
 
     constructor(name) {
         this.name = name;
@@ -108,20 +108,38 @@ class Run {
         this.exceptions.sort((a, b) => b.wall_time - a.wall_time);
     }
 
+    stop(wall_time) {
+        this.end_time = wall_time;
+        this.running = false;
+    }
+
+    get first_activity() {
+        const tags_first_activity = Object.values(this.tags)
+            .map(tag => tag.first_activity)
+            .reduce((prev, curr) => Math.min(prev, curr), new Date().getTime() / 1000);
+        
+        const exceptions_first_activity = this.exceptions
+            .map(val => val.wall_time)
+            .reduce((prev, curr) => Math.min(prev, curr), new Date().getTime() / 1000);
+        
+
+        if (!this.running) {
+            return Math.min(tags_first_activity, exceptions_first_activity, this.end_time);
+        } else {
+            return Math.min(tags_first_activity, exceptions_first_activity);            
+        }
+    }
+
     get last_activity() {
         const tags_last_activity = Object.values(this.tags)
             .map(tag => tag.last_activity)
-            .reduce((prev, curr) => curr < prev ? prev : curr, 0.0);
+            .reduce((prev, curr) => curr < prev ? prev : curr, 0);
         
         const exceptions_last_activity = this.exceptions
             .map(val => val.wall_time)
-            .reduce((prev, curr) => curr < prev ? prev : curr, 0.0);
+            .reduce((prev, curr) => curr < prev ? prev : curr, 0);
         
-
-        if (tags_last_activity > exceptions_last_activity)
-            return tags_last_activity;
-        else
-            return exceptions_last_activity;
+        return Math.max(tags_last_activity, exceptions_last_activity, this.end_time);
     }
 
     get last_activity_type() {
@@ -132,12 +150,13 @@ class Run {
         const exceptions_last_activity = this.exceptions
             .map(val => val.wall_time)
             .reduce((prev, curr) => curr < prev ? prev : curr, 0.0);
-        
 
-        if (tags_last_activity > exceptions_last_activity)
+        if (tags_last_activity > exceptions_last_activity && tags_last_activity > this.end_time)
             return 'scalar';
-        else
+        else if (exceptions_last_activity > this.end_time)
             return 'exception';
+        else
+            return 'end_signal';
     }
 
     set color_id(id) {

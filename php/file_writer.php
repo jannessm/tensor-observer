@@ -2,9 +2,14 @@
 include_once './php/error_response.php';
 
 function append_line_to_file($path, $array) {
-    $file = fopen($path, 'a');
+    if (!file_exists($path)) {
+        $file = fopen($path, 'w');
+    } else {
+        $file = fopen($path, 'a');
+    }
+
     fwrite($file, join(';', $array) . "\n");
-    fclose();
+    fclose($file);
 }
 
 function remove_run($path, $run) {

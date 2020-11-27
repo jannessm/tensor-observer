@@ -10,9 +10,11 @@
         
         <div id="content">
             <h1>Tensor Observer</h1>
+
+            <div id="refresh-button" onclick="refresh()">↺</div>
             
             <h3>Runs</h3>
-            <div id="runs"></div>
+            <table id="runs"></table>
 
             <h3>Scalars</h3>
             <div id="plots"></div>
@@ -20,17 +22,24 @@
             <h3>Exceptions</h3>
             <div id="exceptions">
                 <label for="exceptions-search">Search for run</label>
-                <input type="text" id="exceptions-search" name="exceptions-search" list="run-datalist" oninput="update_exceptions(event)">
+                <input type="text" id="exceptions-search" name="exceptions-search" list="run-datalist" oninput="exceptionViewer.updateLogsByName(event.data)">
                 <datalist id="run-datalist"></datalist>
                 <div id="logs"></div>
             </div>
         </div>
 
-        <script>const scalars = {{ scalars }}; const exceptions = {{ exceptions }};</script>
         <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        
         <script src="assets/data_structures.js"></script>
         <script src="assets/components.js"></script>
-        <script src="assets/functions.js"></script>
+        <script src="assets/utils.js"></script>
+        <script src="assets/api.js"></script>
+        
+        <script src="assets/exception-viewer.js"></script>
+        <script src="assets/loader.js"></script>
+        <script src="assets/plots.js"></script>
+        <script src="assets/run-list.js"></script>
+        
         <script src="assets/bootstrap.js"></script>
     </body>
 </html>

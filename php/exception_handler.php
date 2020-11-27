@@ -33,17 +33,23 @@ function exception_handler($data, $path) {
     }
 }
 
-function get_exception_data($path) {
+function get_exception_data($path, $from) {
     $data = file($path . 'exceptions.csv');
+
+    if (!$data) {
+        $data = array();
+    }
 
     foreach ($data as $i => $line) {
         $values = explode(';', $line);
 
-        $data[$i] = array(
-            "wall_time" => (float) $values[0],
-            "run" => $values[1],
-            "exception" => $values[2]
-        );
+        if ($from < $values[0]) {
+            $data[$i] = array(
+                "wall_time" => (float) $values[0],
+                "run" => trim($values[1]),
+                "exception" => trim($values[2])
+            );
+        }
     }
 
     return json_encode($data);
