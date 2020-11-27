@@ -35,7 +35,6 @@ function updateRunList(runs) {
             // add duration
             const durationField = getField(elem, 'duration');
             let duration = Math.abs(run.last_activity - run.first_activity);
-            console.log(duration, new Date(run.last_activity * 1000), new Date(run.first_activity * 1000));
             const days = Math.floor(duration / (24 * 60 * 60));
             duration -= days * 24 * 60 * 60;
             const hours = Math.floor(duration / (60 * 60));

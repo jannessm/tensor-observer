@@ -3,12 +3,23 @@ from time import time
 import json
 
 class TensorObserver():
+    """A class which handles all API calls to a TensorObserver Server."""
+    
     API = 'http://localhost:8080'
 
     def constructor(self, endpoint='http://localhost:8080'):
+        """all api calls will be made to the defined endpoint"""
         self.API = endpoint
 
     def scalar(self, scalar, run, tag, step, wall_time=None):
+        """performs a http post request to save a scalar value from the training process
+        Args:
+            * scalar: number that should be saved
+            * run: run identifier
+            * tag: tag of the scalar
+            * step: step id
+            * wall_time: if not specified, current time is taken
+        """
         if wall_time is None:
             wall_time = time()
         data = {
@@ -23,6 +34,12 @@ class TensorObserver():
         self._post(data)
 
     def exception(self, e, run, wall_time=None):
+        """performs a http post request to notify that an exception happend
+        Args:
+            * e: Exception object
+            * run: run identifier
+            * wall_time: if not specified, current time is taken
+        """
         if wall_time is None:
             wall_time = time()
         data = {
@@ -35,6 +52,11 @@ class TensorObserver():
         self._post(data)
 
     def end_signal(self, run, wall_time=None):
+        """performs a http post request to notify that the run terminated
+        Args:
+            * run: run identifier
+            * wall_time: if not specified, current time is taken
+        """
         if wall_time is None:
             wall_time = time()
         data = {
