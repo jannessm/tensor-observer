@@ -4,7 +4,7 @@ import json
 
 class TensorObserver():
     """A class which handles all API calls to a TensorObserver Server."""
-    
+
     API = 'http://localhost:8080'
 
     def __init__(self, endpoint='http://localhost:8080'):
