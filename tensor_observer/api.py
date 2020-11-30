@@ -7,7 +7,7 @@ class TensorObserver():
     
     API = 'http://localhost:8080'
 
-    def constructor(self, endpoint='http://localhost:8080'):
+    def __init__(self, endpoint='http://localhost:8080'):
         """all api calls will be made to the defined endpoint"""
         self.API = endpoint
 
