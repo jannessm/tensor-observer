@@ -3,11 +3,11 @@
 include_once './php/file_writer.php';
 
 function end_data_is_complete($data) {
-    if ($data->run === null) {
+    if (!isset($data->run)) {
         respond_error(400, "Run is missing.");
         return FALSE;
 
-    } elseif ($data->wall_time === null) {
+    } elseif (!isset($data->wall_time)) {
         respond_error(400, "Wall time is missing.");
         return FALSE;
 
@@ -33,17 +33,19 @@ function get_end_data($path, $from) {
         $data = [];
     }
 
-    foreach ($data as $i => $line) {
+    $resp = array();
+
+    foreach ($data as $line) {
         $values = explode(';', $line);
 
         if ($from < $values[0]) {
-            $data[$i] = array(
+            array_push($resp, [array(
                 "wall_time" => (float) $values[0],
                 "run" => trim($values[1])
-            );
+            )]);
         }
     }
 
-    return json_encode($data);
+    return json_encode($resp);
 }
 ?>

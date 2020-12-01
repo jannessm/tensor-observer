@@ -133,11 +133,11 @@ class Run {
     get last_activity() {
         const tags_last_activity = Object.values(this.tags)
             .map(tag => tag.last_activity)
-            .reduce((prev, curr) => curr < prev ? prev : curr, 0);
+            .reduce((prev, curr) => Math.max(curr, prev), 0);
         
         const exceptions_last_activity = this.exceptions
             .map(val => val.wall_time)
-            .reduce((prev, curr) => curr < prev ? prev : curr, 0);
+            .reduce((prev, curr) => Math.max(curr, prev), 0);
         
         return Math.max(tags_last_activity, exceptions_last_activity, this.end_time);
     }
@@ -145,11 +145,11 @@ class Run {
     get last_activity_type() {
         const tags_last_activity = Object.values(this.tags)
             .map(tag => tag.last_activity)
-            .reduce((prev, curr) => curr < prev ? prev : curr, 0.0);
+            .reduce((prev, curr) => Math.max(curr, prev), 0.0);
         
         const exceptions_last_activity = this.exceptions
             .map(val => val.wall_time)
-            .reduce((prev, curr) => curr < prev ? prev : curr, 0.0);
+            .reduce((prev, curr) => Math.max(curr, prev), 0.0);
 
         if (tags_last_activity > exceptions_last_activity && tags_last_activity > this.end_time)
             return 'scalar';

@@ -3,15 +3,15 @@
 include_once './php/file_writer.php';
 
 function exception_data_is_complete($data) {
-    if ($data->exception === null) {
+    if (!isset($data->exception)) {
         respond_error(400, "Exception is missing.");
         return FALSE;
 
-    } elseif ($data->run === null) {
+    } elseif (!isset($data->run)) {
         respond_error(400, "Run is missing.");
         return FALSE;
 
-    } elseif ($data->wall_time === null) {
+    } elseif (!isset($data->wall_time)) {
         respond_error(400, "Wall time is missing.");
         return FALSE;
 
@@ -40,18 +40,20 @@ function get_exception_data($path, $from) {
         $data = array();
     }
 
-    foreach ($data as $i => $line) {
+    $resp = array();
+
+    foreach ($data as $line) {
         $values = explode(';', $line);
 
         if ($from < $values[0]) {
-            $data[$i] = array(
+            array_push($resp, [array(
                 "wall_time" => (float) $values[0],
                 "run" => trim($values[1]),
                 "exception" => trim($values[2])
-            );
+            )]);
         }
     }
 
-    return json_encode($data);
+    return json_encode($resp);
 }
 ?>

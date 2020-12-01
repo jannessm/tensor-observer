@@ -23,7 +23,7 @@ if ($input !== '') {
     $data = json_decode($input);
 
     # check if every parameter exists
-    if ($data->type === null) {
+    if (!isset($data->type)) {
         respond_error(400, "Type is missing.");
 
     # handle types

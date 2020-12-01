@@ -1,6 +1,7 @@
 from urllib.request import Request, urlopen
 from time import time
 import json
+import sys
 
 class TensorObserver():
     """A class which handles all API calls to a TensorObserver Server."""
@@ -22,6 +23,23 @@ class TensorObserver():
         """
         if wall_time is None:
             wall_time = time()
+
+        if type(scalar) != float:
+            print('TensorObserver: SCALAR needs to be of type <float>', file=sys.stderr)
+            return
+        if type(run) != str or run == '':
+            print('TensorObserver: RUN needs to be of type <str> and not empty', file=sys.stderr)
+            return
+        if type(tag) != str or tag == '':
+            print('TensorObserver: TAG needs to be of type <str> and not empty', file=sys.stderr)
+            return
+        if type(step) != int:
+            print('TensorObserver: STEP needs to be of type <int>', file=sys.stderr)
+            return
+        if type(wall_time) != float:
+            print('TensorObserver: WALL_TIME needs to be of type <float>', file=sys.stderr)
+            return
+
         data = {
             'type': 'scalar',
             'scalar': scalar,
@@ -33,18 +51,29 @@ class TensorObserver():
 
         self._post(data)
 
-    def exception(self, e, run, wall_time=None):
+    def exception(self, err, run, wall_time=None):
         """performs a http post request to notify that an exception happend
         Args:
-            * e: Exception object
+            * err: Exception message string
             * run: run identifier
             * wall_time: if not specified, current time is taken
         """
         if wall_time is None:
             wall_time = time()
+
+        if type(err) != str:
+            print('TensorObserver: SCALAR needs to be of type <float>', file=sys.stderr)
+            return
+        if type(run) != str or run == '':
+            print('TensorObserver: RUN needs to be of type <str> and not empty', file=sys.stderr)
+            return
+        if type(wall_time) != float:
+            print('TensorObserver: WALL_TIME needs to be of type <float>', file=sys.stderr)
+            return
+
         data = {
             'type': 'exception',
-            'exception': str(e),
+            'exception': err,
             'run': run,
             'wall_time': wall_time
         }
@@ -59,6 +88,14 @@ class TensorObserver():
         """
         if wall_time is None:
             wall_time = time()
+
+        if type(run) != str or run == '':
+            print('TensorObserver: RUN needs to be of type <str> and not empty', file=sys.stderr)
+            return
+        if type(wall_time) != float:
+            print('TensorObserver: WALL_TIME needs to be of type <float>', file=sys.stderr)
+            return
+        
         data = {
             'type': 'end_signal',
             'run': run,
@@ -100,14 +137,12 @@ if __name__ == '__main__':
             )
         else:
             api.exception(
-                Exception(exceptions[randint(0,2)]),
+                exceptions[randint(0,2)],
                 runs[randint(0,3)],
                 time()
             )
         sleep(1)
     
-    api.exception(
-        Exception(exceptions[randint(0,2)]),
-        runs[randint(0,3)],
-        time()
+    api.end_signal(
+        runs[randint(0,3)]
     )

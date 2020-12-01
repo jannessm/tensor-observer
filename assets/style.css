@@ -28,6 +28,7 @@ html {
     right: 32px;
     font-size: 32px;
     border-radius: 50%;
+    cursor: pointer;
 }
 
 #runs {
@@ -99,6 +100,8 @@ html {
     color: white;
     box-sizing: border-box;
     word-wrap: anywhere;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 #exceptions #logs .time {
     color: darkorange;

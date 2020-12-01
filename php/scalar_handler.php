@@ -3,23 +3,23 @@
 include_once './php/file_writer.php';
 
 function scalar_data_is_complete($data) {
-    if ($data->scalar === null) {
+    if (!isset($data->scalar)) {
         respond_error(400, "Scalar is missing.");
         return FALSE;
 
-    } elseif ($data->run === null) {
+    } elseif (!isset($data->run) || $data->run === '') {
         respond_error(400, "Run is missing.");
         return FALSE;
 
-    } elseif ($data->tag === null) {
+    } elseif (!isset($data->tag)) {
         respond_error(400, "Tag is missing.");
         return FALSE;
 
-    } elseif ($data->step === null) {
+    } elseif (!isset($data->step)) {
         respond_error(400, "Step is missing.");
         return FALSE;
 
-    } elseif ($data->wall_time === null) {
+    } elseif (!isset($data->wall_time)) {
         respond_error(400, "Wall time is missing.");
         return FALSE;
 
@@ -48,20 +48,22 @@ function get_scalar_data($path, $from) {
         $data = array();
     }
 
-    foreach ($data as $i => $line) {
+    $resp = array();
+
+    foreach ($data as $line) {
         $values = explode(';', $line);
         
         if ($from < $values[0]) {
-            $data[$i] = array(
+            array_push($resp, [array(
                 "wall_time" => (float) $values[0],
                 "run" => trim($values[1]),
                 "tag" => trim($values[2]),
                 "step" => (int) $values[3],
                 "scalar" => (float) $values[4]
-            );
+            )]);
         }
     }
 
-    return json_encode($data);
+    return json_encode($resp);
 }
 ?>

@@ -27,7 +27,7 @@ class Loader {
 
     async getScalars() {
         let data;
-        if (this.latestScalars) {
+        if (!this.latestScalars) {
             data = await API.getScalars();
         } else {
             data = await API.getScalars(this.latestScalars);
@@ -38,18 +38,18 @@ class Loader {
 
     async getExceptions() {
         let data;
-        if (this.latestExceptions) {
+        if (!this.latestExceptions) {
             data = await API.getExceptions();
         } else {
             data = await API.getExceptions(this.latestExceptions);
         }
-        
+
         data.forEach(this.parseException.bind(this));
     }
 
     async getEndSignals() {
         let data;
-        if (this.latestEndSignal) {
+        if (!this.latestEndSignal) {
             data = await API.getEndSignals();
         } else {
             data = await API.getEndSignals(this.latestEndSignal);
@@ -68,17 +68,22 @@ class Loader {
             entry.scalar
         );
 
-        this.latestScalars = this.latestScalars < entry.wall_time ? entry.wall_time : this.latestScalars;
+        if (!this.latestScalars || this.latestScalars < entry.wall_time) {
+            this.latestScalars =  entry.wall_time;
+        }
     }
 
     parseException(entry) {
+        console.log(entry);
         this._checkRunExists(entry);
         
         this.runs[entry.run].addException(
             entry.wall_time, entry.exception
         );
 
-        this.latestExceptions = this.latestExceptions < entry.wall_time ? entry.wall_time : this.latestExceptions;
+        if (!this.latestExceptions || this.latestExceptions < entry.wall_time) {
+            this.latestExceptions = entry.wall_time;
+        }
     }
 
     parseEndSignal(entry) {
@@ -86,10 +91,13 @@ class Loader {
 
         this.runs[entry.run].stop(entry.wall_time);
 
-        this.latestEndSignal = this.latestEndSignal < entry.wall_time ? entry.wall_time : this.latestEndSignal;
+        if (!this.latestEndSignal || this.latestEndSignal < entry.wall_time) {
+            this.latestEndSignal = entry.wall_time;
+        }
     }
 
     _checkRunExists(entry) {
+        console.log(entry);
         entry.run = entry.run.trim();
         if (!this.runs[entry.run]) {
             this.runs[entry.run] = new Run(entry.run);

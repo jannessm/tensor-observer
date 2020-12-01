@@ -27,8 +27,11 @@ class ExceptionViewer {
 
     updateLogsByName(name) {
         const run = this.runsWithExceptions.find(run => run.name === name);
+        this.logsElement.innerHTML = '';
     
-        const new_content = run.exceptions.map(e => `<span class="time">${get_data_string(e.wall_time)} $</span> ${e.exception}`).join('<br>');
-        this.logsElement.innerHTML = new_content;
+        if (run) {
+            const new_content = run.exceptions.map(e => `<span class="time">${get_data_string(e.wall_time)} $</span> ${e.exception}`).join('<br>');
+            this.logsElement.innerHTML = new_content;
+        }
     }
 }
