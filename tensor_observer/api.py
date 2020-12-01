@@ -61,8 +61,8 @@ class TensorObserver():
         if wall_time is None:
             wall_time = time()
 
-        if type(err) != str:
-            print('TensorObserver: SCALAR needs to be of type <float>', file=sys.stderr)
+        if type(err) != str or err == '':
+            print('TensorObserver: err needs to be of type <str>', file=sys.stderr)
             return
         if type(run) != str or run == '':
             print('TensorObserver: RUN needs to be of type <str> and not empty', file=sys.stderr)

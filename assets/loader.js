@@ -74,7 +74,6 @@ class Loader {
     }
 
     parseException(entry) {
-        console.log(entry);
         this._checkRunExists(entry);
         
         this.runs[entry.run].addException(
@@ -97,7 +96,6 @@ class Loader {
     }
 
     _checkRunExists(entry) {
-        console.log(entry);
         entry.run = entry.run.trim();
         if (!this.runs[entry.run]) {
             this.runs[entry.run] = new Run(entry.run);

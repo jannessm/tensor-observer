@@ -39,7 +39,7 @@ class Tag {
     name = '';
     steps = [];
     last_activity = 0;
-    first_activity = 0;
+    first_activity = new Date().getTime() / 1000;
     color_id = 0;
     run = '';
 
@@ -52,7 +52,7 @@ class Tag {
         this.steps.push(new Step(step, wall_time, scalar));
 
         this.last_activity = Math.max(wall_time, this.last_activity);
-        this.first_activity = Math.min(wall_time, this.last_activity);
+        this.first_activity = Math.min(wall_time, this.first_activity);
 
         this.steps.sort((a,b) => a.step - b.step);
     }
