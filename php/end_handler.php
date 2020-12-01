@@ -39,10 +39,10 @@ function get_end_data($path, $from) {
         $values = explode(';', $line);
 
         if ($from < $values[0]) {
-            array_push($resp, [array(
+            array_push($resp, array(
                 "wall_time" => (float) $values[0],
                 "run" => trim($values[1])
-            )]);
+            ));
         }
     }
 

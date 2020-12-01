@@ -54,13 +54,13 @@ function get_scalar_data($path, $from) {
         $values = explode(';', $line);
         
         if ($from < $values[0]) {
-            array_push($resp, [array(
+            array_push($resp, array(
                 "wall_time" => (float) $values[0],
                 "run" => trim($values[1]),
                 "tag" => trim($values[2]),
                 "step" => (int) $values[3],
                 "scalar" => (float) $values[4]
-            )]);
+            ));
         }
     }
 
