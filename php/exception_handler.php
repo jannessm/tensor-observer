@@ -27,7 +27,7 @@ function exception_handler($data, $path) {
         $line = array(
             $data->wall_time,
             $data->run,
-            $data->exception
+            str_replace("\n", "<br>", $data->exception)
         );
         append_line_to_file($path . 'exceptions.csv', $line);
     }

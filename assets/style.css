@@ -102,6 +102,7 @@ html {
     word-wrap: anywhere;
     overflow-x: hidden;
     overflow-y: scroll;
+    white-space: pre;
 }
 #exceptions #logs .time {
     color: darkorange;
