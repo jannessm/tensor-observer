@@ -62,3 +62,7 @@ function updateRunList(runs) {
 function getField(elem, className) {
     return elem.getElementsByClassName(className)[0].children[0]
 }
+
+function getCSV(run, tag) {
+    return loader.runs[run].tags[tag].toCSV();
+}

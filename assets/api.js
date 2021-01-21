@@ -22,8 +22,8 @@ class API {
         return promise;
     }
 
-    static deleteRun(run) {
-        return API.get('?delete='+run);
+    static deleteRun(run, pwd) {
+        return API.get('?delete='+run+'&pwd='+md5(md5(pwd)));
     }
 
     static getScalars(from) {

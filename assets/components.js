@@ -1,8 +1,9 @@
 const RUN = `
     <td>
-        <input type="checkbox" name="{{run}}" value="{{run}}" checked>
+        <input type="checkbox" name="{{run}}" value="{{run}}">
         <label for="{{run}}" onclick="toggleCheckbox(event); return false;">{{run}}</label>
-        <span class="delete" onclick="confirmDelete(event); return false;">&#x1F5D9;</span>
+        <span class="delete" onclick="confirmDelete(event); return false;" title="delete run">&Cross;</span>
+        <span class="download" onclick="download(event); return false;" title="download scalars">&DownArrowBar;</span>
     </td>
     <td>
         <span class="last-activity">Last activity: <span class="ok"></span></span>

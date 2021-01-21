@@ -8,6 +8,15 @@
         <div class="background">
             <div class="noise"></div>
         </div>
+
+        <div id="delete">
+            <div class="prompt">
+                <div>Enter your password to delete all data of run {{ run }}.</div>
+                <input type="password" placeholder="password" id="delete_password" onchange="del()">
+                <button onclick="cancelDelete()">Cancel</button>
+                <button onclick="del()">Delete</button>
+            </div>
+        </div>
         
         <div id="content">
             <h1>Tensor Observer</h1>
@@ -15,6 +24,7 @@
             <div id="refresh-button" onclick="refresh()">&#8634;</div>
             
             <h3>Runs</h3>
+            <button onclick="toggleAll()">Toggle all</button>
             <table id="runs"></table>
 
             <h3>Scalars</h3>
@@ -23,7 +33,7 @@
             <h3>Exceptions</h3>
             <div id="exceptions">
                 <label for="exceptions-search">Search for run</label>
-                <input type="text" id="exceptions-search" name="exceptions-search" list="run-datalist" oninput="exceptionViewer.updateLogsByName(event.data)">
+                <input type="text" id="exceptions-search" name="exceptions-search" list="run-datalist" oninput="exceptionViewer.updateLogsByName(event.target.value)">
                 <datalist id="run-datalist"></datalist>
                 <div id="logs"></div>
             </div>
@@ -31,6 +41,7 @@
 
         <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
         
+        <script src="assets/md5.min.js"></script>
         <script src="assets/data_structures.js"></script>
         <script src="assets/components.js"></script>
         <script src="assets/utils.js"></script>

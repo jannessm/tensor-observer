@@ -1,5 +1,7 @@
 <?php
 
+$DELETE_PWD = md5(md5('CHANGE-ME'));
+
 include_once './php/scalar_handler.php';
 include_once './php/exception_handler.php';
 include_once './php/end_handler.php';
@@ -44,6 +46,11 @@ if ($input !== '') {
         $from = $_GET['from'];
     }
     if (isset($_GET['delete'])) {
+        if (!isset($_GET['pwd']) || $_GET['pwd'] !== $DELETE_PWD) {
+            respond_error(401, "Wrong pwd.");
+            return;
+        }
+        
         try {
             remove_run($DATA_PATH . 'scalars.csv', $_GET['delete']);
             remove_run($DATA_PATH . 'exceptions.csv', $_GET['delete']);

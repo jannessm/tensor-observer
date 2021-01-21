@@ -33,6 +33,10 @@ class Step {
         this.wall_time = wall_time;
         this.scalar = scalar;
     }
+
+    toCSVRow() {
+        return [this.wall_time, this.step, this.scalar].join(',');
+    }
 }
 
 class Tag {
@@ -80,6 +84,14 @@ class Tag {
             text: texts,
         };
     }
+
+    toCSV() {
+        const csv_lines = ['Wall time,Step,Value'].concat(
+            this.steps.map(step => step.toCSVRow())
+        );
+
+        return csv_lines.join('\n');
+    }
 }
 
 class Run {
@@ -88,7 +100,7 @@ class Run {
     exceptions = [];
     end_time = 0;
     _color_id = 0;
-    visible = true;
+    visible = false;
     running = true;
 
     constructor(name) {
