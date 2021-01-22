@@ -6,8 +6,12 @@ class Loader {
     
     constructor() { }
 
-    toggle(run) {
-        this.runs[run].visible = !this.runs[run].visible;
+    toggle(run, visible=undefined) {
+        if (!!visible) {
+            this.runs[run].visible = visible;
+        } else {
+            this.runs[run].visible = !this.runs[run].visible;
+        }
     }
 
     updateData() {

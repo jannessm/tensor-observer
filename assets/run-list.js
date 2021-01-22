@@ -5,10 +5,13 @@ function updateRunList(runs) {
     Object.values(runs)
         .sort((a, b) => a.name.localeCompare(b.name))
         .forEach(run => {
-            const entry = RUN.replace(/{{run}}/g, run.name);
+            let entry = RUN.replace(/{{run}}/g, run.name);
             const elem = document.createElement('tr');
             elem.className = 'run color' + run.color_id;
             elem.setAttribute('name', run.name);
+
+            // checked state
+            entry = entry.replace('{{ visible }}', run.visible ? 'checked' : '');
             elem.innerHTML = entry;
             runs_div.appendChild(elem);
             

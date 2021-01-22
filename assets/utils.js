@@ -7,7 +7,7 @@ function toggleCheckbox(event) {
         input.setAttribute('checked', '');
     }
 
-    loader.toggle(event.target.getAttribute('for'));
+    loader.toggle(event.target.getAttribute('for'), input.hasAttribute('checked'));
     updatePlots(loader.runs);
 }
 
