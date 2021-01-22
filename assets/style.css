@@ -23,7 +23,7 @@ html {
 }
 
 #refresh-button {
-    position: absolute;
+    position: fixed;
     top: 8px;
     right: 32px;
     font-size: 32px;
