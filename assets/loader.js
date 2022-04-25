@@ -1,5 +1,6 @@
 class Loader {
-    runs = {}
+    runs = {};
+    runPaths = [];
     latestScalars;
     latestExceptions;
     latestEndSignal;
@@ -7,11 +8,41 @@ class Loader {
     constructor() { }
 
     toggle(run, visible=undefined) {
+        run = this.getRun(run);
         if (!!visible) {
-            this.runs[run].visible = visible;
+            run.visible = visible;
         } else {
-            this.runs[run].visible = !this.runs[run].visible;
+            run.visible = !run.visible;
         }
+    }
+
+    getRun(run, runs=undefined) {
+        run = run.trim()
+        const path = run.split('/');
+        if (!runs && this.runPaths.indexOf(run) < 0) {
+            this.runPaths.push(run);
+        }
+        if (!runs) {
+            runs = this.runs;
+        }
+        
+        if (!runs[path[0]] && path.length > 1) {
+            runs[path[0]] = {};
+            return this.getRun(path.slice(1).join('/'), runs[path[0]]);
+        
+        } else if (path.length > 1) {
+            return this.getRun(path.slice(1).join('/'), runs[path[0]]);
+        
+        } else if (!runs[path[0]]) {
+            runs[path[0]] = new Run(path[0]);
+            return runs[path[0]];
+        } else {
+            return runs[path[0]];
+        }
+    }
+
+    getSortedRuns() {
+
     }
 
     updateData() {
@@ -20,12 +51,10 @@ class Loader {
             .finally(this.getEndSignals.bind(this))
             .finally(() => {
                 // order runs by name
-                const runs_order = Object.values(this.runs)
-                    .sort((a, b) => a.name.localeCompare(b.name))
-                    .map(run => run.name)
+                this.runPaths = this.runPaths.sort();
                 
                 // assign colors
-                runs_order.forEach((run, id) => this.runs[run].color_id = id % COLORS.length);
+                this.runPaths.forEach((run, id) => this.getRun(run).color_id = id % COLORS.length);
             });
     }
 
@@ -63,9 +92,7 @@ class Loader {
     }
 
     parseScalar(entry) {
-        this._checkRunExists(entry);
-
-        this.runs[entry.run].addScalarEntry(
+        this.getRun(entry.run).addScalarEntry(
             entry.tag,
             entry.step,
             entry.wall_time,
@@ -78,9 +105,7 @@ class Loader {
     }
 
     parseException(entry) {
-        this._checkRunExists(entry);
-        
-        this.runs[entry.run].addException(
+        this.getRun(entry.run).addException(
             entry.wall_time, entry.exception
         );
 
@@ -90,19 +115,10 @@ class Loader {
     }
 
     parseEndSignal(entry) {
-        this._checkRunExists(entry);
-
-        this.runs[entry.run].stop(entry.wall_time);
+        this.getRun(entry.run).stop(entry.wall_time);
 
         if (!this.latestEndSignal || this.latestEndSignal < entry.wall_time) {
             this.latestEndSignal = entry.wall_time;
-        }
-    }
-
-    _checkRunExists(entry) {
-        entry.run = entry.run.trim();
-        if (!this.runs[entry.run]) {
-            this.runs[entry.run] = new Run(entry.run);
         }
     }
 

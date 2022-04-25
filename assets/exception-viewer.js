@@ -6,7 +6,9 @@ class ExceptionViewer {
 
     constructor() { }
 
-    update(runs) {
+    update(loader) {
+        const runs = loader.runPaths.map(run => loader.getRun(run));
+
         this.runsWithExceptions = Object.values(runs).filter(run => run.exceptions.length > 0);
 
         this.runsWithExceptions.forEach(run => {

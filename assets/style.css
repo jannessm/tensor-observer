@@ -64,8 +64,18 @@ html {
 #runs {
     width: 100%;
 }
-.run td {
-    padding: 12px;
+.expandable {
+    padding-top: 12px;
+}
+.expandable-header {
+    cursor: pointer;
+}
+.expandable-content {
+    padding-left: 24px;
+}
+.run {
+    display: flex;
+    justify-content: space-between;
 }
 .run .delete, .run .download {
     font-size: 16px;

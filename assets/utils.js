@@ -8,7 +8,7 @@ function toggleCheckbox(event) {
     }
 
     loader.toggle(event.target.getAttribute('for'), input.hasAttribute('checked'));
-    updatePlots(loader.runs);
+    updatePlots(loader);
 }
 
 function toggleAll() {
@@ -24,6 +24,15 @@ function toggleAll() {
         loader.toggle(run);
     });
     updatePlots(loader.runs);
+}
+
+function toggleHeader(e) {
+    const content = e.target.parentElement.getElementsByClassName('expandable-content')[0];
+    if (!content.style.display || content.style.display === 'block') {
+        content.style.display = 'none';
+    } else {
+        content.style.display = 'block';
+    }
 }
 
 
@@ -52,7 +61,6 @@ function del() {
     const pwd_input = document.querySelector('#delete .prompt input');
     const pwd = pwd_input.value;
     pwd_input.value = '';
-    console.log(pwd);
     
     const prompt = document.querySelector('#delete');
     const text_div = prompt.children[0].children[0];
@@ -65,8 +73,6 @@ function del() {
 function download(event) {
     const input = event.target.parentElement.children[0];
     const run = input.value;
-
-    console.log(loader.runs[run].tags)
     
     Object.keys(loader.runs[run].tags).forEach(tag => {
 
@@ -91,12 +97,12 @@ function refresh() {
     loader.updateData().then(() => {
         ///////////////////// update html ///////////////////
         // add run list
-        updateRunList(loader.runs);
+        updateRunList(loader);
         
         // add plots
-        updatePlots(loader.runs);
+        updatePlots(loader);
         
         // add exceptions
-        exceptionViewer.update(loader.runs);
+        exceptionViewer.update(loader);
     });
 }
