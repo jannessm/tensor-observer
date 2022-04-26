@@ -1,4 +1,4 @@
-class API {
+export class API {
     static get(path) {
         let resolve, reject;
         const promise = new Promise((res, rej) => {resolve = res; reject = rej});

@@ -1,13 +1,20 @@
-class ExceptionViewer {
-    runsWithExceptions = [];
-    datalistElement = document.getElementById('run-datalist');
-    searchInput = document.getElementById('exceptions-search');
-    logsElement = document.getElementById('logs');
+import { EXCEPTIONS } from "./templates.js";
 
-    constructor() { }
+export class ExceptionViewer extends HTMLElement {
+
+    constructor() {
+        super();
+        
+        this.innerHTML = EXCEPTIONS;
+        this.datalist = document.getElementById('run-datalist');
+        this.logs = document.getElementById('logs');
+        this.search = document.getElementById('exceptions-search');
+
+        this.runsWithExceptions = [];
+    }
 
     update(loader) {
-        const runs = loader.runPaths.map(run => loader.getRun(run));
+        const runs = loader.runs.iterable();
 
         this.runsWithExceptions = Object.values(runs).filter(run => run.exceptions.length > 0);
 
@@ -15,13 +22,13 @@ class ExceptionViewer {
                 const elem = document.createElement('option');
                 elem.setAttribute('value', run.name);
                 
-                this.datalistElement.appendChild(elem);
+                this.datalist.appendChild(elem);
             });
 
         const firstRun = this.runsWithExceptions[0];
 
         if (firstRun) {
-            this.searchInput.value = firstRun.name;
+            this.search.value = firstRun.name;
     
             this.updateLogsByName(firstRun.name);
         }
@@ -29,11 +36,12 @@ class ExceptionViewer {
 
     updateLogsByName(name) {
         const run = this.runsWithExceptions.find(run => run.name === name);
-        this.logsElement.innerHTML = '';
+        this.logs.innerHTML = '';
     
         if (run) {
             const new_content = run.exceptions.map(e => `<span class="time">${get_data_string(e.wall_time)} $</span> ${e.exception}`).join('<br>');
-            this.logsElement.innerHTML = new_content;
+            this.logs.innerHTML = new_content;
         }
     }
 }
+window.customElements.define('app-exceptions', ExceptionViewer);

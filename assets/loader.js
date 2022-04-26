@@ -1,48 +1,37 @@
-class Loader {
-    runs = {};
-    runPaths = [];
+import { API } from './api.js';
+import { Run } from './data_structures/run.js';
+import { RunCollection } from './data_structures/run-collection.js';
+
+export class Loader {
+    runs = new RunCollection();
     latestScalars;
     latestExceptions;
     latestEndSignal;
-    
-    constructor() { }
+
+    constructor(colors) {
+        this.colors = colors;
+    }
 
     toggle(run, visible=undefined) {
-        run = this.getRun(run);
         if (!!visible) {
             run.visible = visible;
         } else {
             run.visible = !run.visible;
         }
+
+        this.toggleCallback();
     }
 
-    getRun(run, runs=undefined) {
-        run = run.trim()
-        const path = run.split('/');
-        if (!runs && this.runPaths.indexOf(run) < 0) {
-            this.runPaths.push(run);
-        }
-        if (!runs) {
-            runs = this.runs;
-        }
-        
-        if (!runs[path[0]] && path.length > 1) {
-            runs[path[0]] = {};
-            return this.getRun(path.slice(1).join('/'), runs[path[0]]);
-        
-        } else if (path.length > 1) {
-            return this.getRun(path.slice(1).join('/'), runs[path[0]]);
-        
-        } else if (!runs[path[0]]) {
-            runs[path[0]] = new Run(path[0]);
-            return runs[path[0]];
-        } else {
-            return runs[path[0]];
-        }
-    }
+    // overriden in app.js
+    toggleCallback() {}
 
-    getSortedRuns() {
-
+    getRun(run_path) {
+        let run = this.runs.getRunById(run_path);
+        if (!run) {
+            run = new Run(run_path);
+            this.runs.addRunById(run_path, run);
+        }
+        return run;
     }
 
     updateData() {
@@ -51,10 +40,7 @@ class Loader {
             .finally(this.getEndSignals.bind(this))
             .finally(() => {
                 // order runs by name
-                this.runPaths = this.runPaths.sort();
-                
-                // assign colors
-                this.runPaths.forEach((run, id) => this.getRun(run).color_id = id % COLORS.length);
+                this.runs.iterable().forEach((run, id) => run.color_id = id % this.colors.length);
             });
     }
 

@@ -1,14 +1,5 @@
 function toggleCheckbox(event) {    
-    // toggle checkbox
-    const input = event.target.parentElement.children[0];
-    if (input.hasAttribute('checked')) {
-        input.removeAttribute('checked');
-    } else {
-        input.setAttribute('checked', '');
-    }
-
-    loader.toggle(event.target.getAttribute('for'), input.hasAttribute('checked'));
-    updatePlots(loader);
+    
 }
 
 function toggleAll() {
@@ -25,16 +16,6 @@ function toggleAll() {
     });
     updatePlots(loader.runs);
 }
-
-function toggleHeader(e) {
-    const content = e.target.parentElement.getElementsByClassName('expandable-content')[0];
-    if (!content.style.display || content.style.display === 'block') {
-        content.style.display = 'none';
-    } else {
-        content.style.display = 'block';
-    }
-}
-
 
 let curr_del_run = '';
 function confirmDelete(event) {
@@ -93,16 +74,30 @@ function download(event) {
     })
 }
 
-function refresh() {
-    loader.updateData().then(() => {
-        ///////////////////// update html ///////////////////
-        // add run list
-        updateRunList(loader);
-        
-        // add plots
-        updatePlots(loader);
-        
-        // add exceptions
-        exceptionViewer.update(loader);
-    });
+export function get_data_string(wall_time) {
+    const d = new Date(wall_time * 1000);
+    return d.toDateString() + ', ' + d.toLocaleTimeString();
+}
+
+export function get_duration_string(duration) {
+    const days = Math.floor(duration / (24 * 60 * 60));
+    duration -= days * 24 * 60 * 60;
+    const hours = Math.floor(duration / (60 * 60));
+    duration -= hours * 60 * 60;
+    const mins = Math.floor(duration / 60);
+    duration -= mins * 60;
+    const secs = Math.ceil(duration);
+    
+    let text = '';
+    if (days > 0 ) {
+        text += days + 'd ';
+    }
+    if (hours > 0) {
+        text += hours + 'h ';
+    }
+    if (mins > 0) {
+        text += mins + 'm ';
+    }
+
+    return text + secs + 's';
 }
