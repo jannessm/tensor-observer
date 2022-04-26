@@ -1,7 +1,7 @@
 export const RUN = `
 <div>
     <input type="checkbox">
-    <label onclick="toggleCheckbox(event); return false;"></label>
+    <label></label>
     <span class="delete" title="delete run">&Cross;</span>
     <span class="download" title="download scalars">&DownArrowBar;</span>
 </div>
@@ -46,7 +46,6 @@ export const DELETE_PROMPT = `
 
 export const RUN_LIST = `
 <h3>Runs</h3>
-<button onclick="toggleAll()">Toggle all</button>
 <div id="runs"></div>
 `;
 
