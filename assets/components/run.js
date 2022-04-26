@@ -13,7 +13,7 @@ export class RunComponent extends HTMLDivElement {
         this.className = 'run color' + this.run.color_id;
 
         this.getElementsByClassName('delete')[0].onclick = this.confirmDelete;
-        this.getElementsByClassName('download')[0].onclick = this.delete;
+        this.getElementsByClassName('download')[0].onclick = this.download.bind(this);
 
         this.initCheckbox();
         this.addLastActivityAndStatus();
@@ -70,6 +70,30 @@ export class RunComponent extends HTMLDivElement {
         }
 
         this.loader.toggle(this.run, this.checkbox.hasAttribute('checked'));
+    }
+
+    confirmDelete(event) {
+        const delete_promp = document.getElementsByTagName('app-delete')[0];
+        delete_promp.confirmDelete(event);
+    }
+
+    download() {
+        Object.keys(this.run.tags).forEach(tag => {    
+            const csv = new Blob([this.run.tags[tag].toCSV()], {
+                type: 'text/csv;charset=utf-8'
+            });
+        
+            const element = document.createElement('a');
+            element.setAttribute('href', window.URL.createObjectURL(csv));
+            element.setAttribute('download', this.run.name + '_' + tag.replace('/', '_') + '.csv');
+        
+            element.style.display = 'none';
+            document.body.appendChild(element);
+        
+            element.click();
+        
+            document.body.removeChild(element);
+        });
     }
 }
 window.customElements.define('app-run', RunComponent, {extends: 'div'});

@@ -21,14 +21,7 @@ export const APP = `
     <div class="noise"></div>
 </div>
 
-<div id="delete">
-<div class="prompt">
-    <div>Enter your password to delete all data of run {{ run }}.</div>
-    <input type="password" placeholder="password" id="delete_password" onchange="del()">
-    <button onclick="cancelDelete()">Cancel</button>
-    <button onclick="del()">Delete</button>
-</div>
-</div>
+<app-delete></app-delete>
 
 <div id="content">
 <h1>Tensor Observer</h1>
@@ -42,6 +35,14 @@ export const APP = `
 <app-exceptions></app-exceptions>
 </div>
 <style is="app-colors"></style>`;
+
+export const DELETE_PROMPT = `
+<div class="prompt">
+    <div>Enter your password to delete all data of run {{ run }}.</div>
+    <input type="password" placeholder="password" id="delete_password">
+    <button class="cancel">Cancel</button>
+    <button class="del">Delete</button>
+</div>`;
 
 export const RUN_LIST = `
 <h3>Runs</h3>

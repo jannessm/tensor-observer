@@ -11,6 +11,7 @@ Simple PHP Server to keep track of current machine learning trainings.
 * php/*
 * assets/*
 * and create a "data" folder
+* change the password in index.php for the deletion authorization
 
 2. create an object of the API
 ```python

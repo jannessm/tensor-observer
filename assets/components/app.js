@@ -2,6 +2,7 @@ import { Colors } from "./colors.js";
 import { RunListComponent } from "./run-list.js";
 import { PlotListComponent } from "./plot-list.js";
 import { ExceptionViewer } from "./exception-viewer.js";
+import { DeleteComponent } from "./delete-prompt.js";
 import { APP } from "./templates.js";
 import { Loader } from "../loader.js";
 

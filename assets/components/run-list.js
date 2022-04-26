@@ -42,7 +42,3 @@ export class RunListComponent extends HTMLElement {
     }
 }
 window.customElements.define('app-run-list', RunListComponent);
-
-function getCSV(run, tag) {
-    return loader.runs[run].tags[tag].toCSV();
-}
