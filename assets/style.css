@@ -69,9 +69,18 @@ app-expandable {
 }
 .expandable-header {
     cursor: pointer;
+    padding: 6px;
+}
+.expandable-header.collapsed::before {
+    content: "▶";
+    margin-right: 6px;
+}
+.expandable-header.open::before {
+    content: "▼";
+    margin-right: 6px;
 }
 .expandable-content {
-    padding-left: 24px;
+    padding: 6px;
 }
 .run {
     display: flex;
@@ -119,9 +128,35 @@ app-expandable {
     display: inline-block;
 }
 
-.plot {
-    display: inline-block;
-    margin: 8px;
+.app-plot-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 12px;
+}
+
+@media (max-width: 1000px) {
+    app-plot {
+        display: inline-block;
+        width: 100%;
+        height: 500px;
+    }   
+}
+
+@media (min-width: 1001px) and (max-width: 1500px) {
+    app-plot {
+        display: inline-block;
+        width: calc(50% - 6px);
+        height: 500px;
+    }   
+}
+
+@media (min-width: 1501px) {
+    app-plot {
+        display: inline-block;
+        width: calc(33% - 6px);
+        height: 500px;
+    }   
 }
 
 #exceptions {

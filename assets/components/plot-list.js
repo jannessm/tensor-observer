@@ -40,10 +40,20 @@ export class PlotListComponent extends HTMLElement {
             return;
         }
         
+        // add a wrapper for enabling advanced styling
+        let plot_wrapper;
+        if (div.content.children.length == 0) {
+            plot_wrapper = document.createElement('div');
+            plot_wrapper.className = 'app-plot-wrapper';
+            div.content.appendChild(plot_wrapper);
+        } else {
+            plot_wrapper = div.content.children[0];
+        }
+
         const full_path = id + '/' + path.slice(1).join('/');
-        let plot = [].slice.call(div.content.children).find(elem => elem.id === full_path);
+        let plot = [].slice.call(plot_wrapper.children).find(elem => elem.id === full_path);
         if (!plot) {
-            plot = new PlotComponent(full_path, runs, div.content);
+            plot = new PlotComponent(full_path, runs, plot_wrapper);
         } else {
             plot.update(runs);
         }

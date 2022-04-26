@@ -25,7 +25,7 @@ export class PlotComponent extends HTMLElement {
             xaxis: {
                 title: 'step',
             },
-        });
+        }, {responsive: true});
     }
 }
 window.customElements.define('app-plot', PlotComponent);
